@@ -14,3 +14,5 @@ RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 COPY . .
 
+#start web app
+CMD [ "python", "-m" , "flask", "run", "--host=0.0.0.0"]
