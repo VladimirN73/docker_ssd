@@ -49,8 +49,8 @@ jobs:
           context: ./
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/docker_ssd:latest
+          push: true          
+          tags: ghcr.io/vladimirn73/docker_ssd:latest  #tags: ghcr.io/${{ github.repository_owner }}/docker_ssd:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
