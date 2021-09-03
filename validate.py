@@ -472,6 +472,13 @@ def create_weigths():
     zip_ref = zipfile.ZipFile(target, "r")
     zip_ref.extractall("weights")
 
+def remove_files(folder, pattern):
+    files = glob.glob(folder + '/' + pattern, recursive=True)
+    for f in files:
+        try:
+            os.remove(f)
+        except OSError as e:
+            print("Error: %s : %s" % (f, e.strerror))
 
 def run():
     start_time = time.time()
@@ -481,13 +488,7 @@ def run():
     folder_stl = 'data/MulSet/set20/'
     file_weights = 'weights/VOC.pth'
 
-    files = glob.glob(folder_stl + '/*.png', recursive=True)
-
-    for f in files:
-        try:
-            os.remove(f)
-        except OSError as e:
-            print("Error: %s : %s" % (f, e.strerror))
+    remove_files(folder_stl, "/*.png")
 
     test_ssdnet(folder_stl, file_weights)
 
