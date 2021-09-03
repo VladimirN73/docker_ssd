@@ -1,5 +1,4 @@
-import os.path
-
+import os
 from flask import Flask
 import validate
 import sys
@@ -12,7 +11,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     str: str = """
-    <h2> docker_ssd v.0.0.3 is running ... </h2>
+    <h2> docker_ssd v.0.0.4 is running ... </h2>
     Execute <a href='./validate'>validate</a>
     <br><br><br>
     Show <a href='./debug'>debug</a>
@@ -31,6 +30,8 @@ def debug():
     
     
     <h2> History </h2>
+    <h3> v.0.0.4</h3>
+    <br><strong>03.02.21</strong> try to fix issue with Create Folder
     <h3> v.0.0.3</h3>
     <br><strong>03.02.21</strong> add --show result PNG-Files    
     <br><br>
@@ -63,24 +64,30 @@ def run_validate_internal():
 
     # TODO get and present results (generated PNGs)
 
-    folder_res = '.\data\MulSet\set20'  # TODO magic string, managed outside of this func
-    folder_static = '.\static\generated'
+    folder_res = 'data/MulSet/set20'  # TODO magic string, managed outside of this func
+    folder_static = 'static/generated'
     pattern = "*.png"
 
-    pathlib.Path(folder_static).mkdir(parents=True, exist_ok=True)
+    #pathlib.Path(folder_static).mkdir(parents=True, exist_ok=True)
+
+    if not os.path.exists(folder_static):
+        os.makedirs(folder_static)
+
+    if not os.path.exists(folder_static):
+        ret += "<br> folder NOT available" + folder_static
 
     validate.remove_files(folder_static, pattern)
 
-    files = glob.glob(folder_res + '\\' + pattern)
+    files = glob.glob(folder_res + '/' + pattern)
     for f in files:
-        ret += "<br> copy file" + folder_res + '\\' + os.path.basename(f)
+        ret += "<br> copy file" + folder_res + '/' + os.path.basename(f)
         shutil.copy(f, folder_static)
 
-    files = glob.glob(folder_static + '\\' + pattern)
+    files = glob.glob(folder_static + '/' + pattern)
     for f in files:
         temp = os.path.basename(f)
         ret += "<br>" + temp
-        ret += "<img src='" + folder_static + "\\" + temp + "'/>"
+        ret += "<img src='" + folder_static + "/" + temp + "'/>"
 
     return ret
 
