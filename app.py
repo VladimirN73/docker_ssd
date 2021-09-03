@@ -1,5 +1,4 @@
-import os.path
-
+import os
 from flask import Flask
 import validate
 import sys
@@ -63,24 +62,30 @@ def run_validate_internal():
 
     # TODO get and present results (generated PNGs)
 
-    folder_res = '.\data\MulSet\set20'  # TODO magic string, managed outside of this func
-    folder_static = '.\static\generated'
+    folder_res = 'data/MulSet/set20'  # TODO magic string, managed outside of this func
+    folder_static = 'static/generated'
     pattern = "*.png"
 
-    pathlib.Path(folder_static).mkdir(parents=True, exist_ok=True)
+    #pathlib.Path(folder_static).mkdir(parents=True, exist_ok=True)
+
+    if not os.path.exists(folder_static):
+        os.makedirs(folder_static)
+
+    if not os.path.exists(folder_static):
+        ret += "<br> folder NOT available" + folder_static
 
     validate.remove_files(folder_static, pattern)
 
-    files = glob.glob(folder_res + '\\' + pattern)
+    files = glob.glob(folder_res + '/' + pattern)
     for f in files:
-        ret += "<br> copy file" + folder_res + '\\' + os.path.basename(f)
+        ret += "<br> copy file" + folder_res + '/' + os.path.basename(f)
         shutil.copy(f, folder_static)
 
-    files = glob.glob(folder_static + '\\' + pattern)
+    files = glob.glob(folder_static + '/' + pattern)
     for f in files:
         temp = os.path.basename(f)
         ret += "<br>" + temp
-        ret += "<img src='" + folder_static + "\\" + temp + "'/>"
+        ret += "<img src='" + folder_static + "/" + temp + "'/>"
 
     return ret
 
