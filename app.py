@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     str: str = """
-    <h2> docker_ssd v.0.0.3 is running ... </h2>
+    <h2> docker_ssd v.0.0.4 is running ... </h2>
     Execute <a href='./validate'>validate</a>
     <br><br><br>
     Show <a href='./debug'>debug</a>
@@ -30,6 +30,8 @@ def debug():
     
     
     <h2> History </h2>
+    <h3> v.0.0.4</h3>
+    <br><strong>03.02.21</strong> try to fix issue with Create Folder
     <h3> v.0.0.3</h3>
     <br><strong>03.02.21</strong> add --show result PNG-Files    
     <br><br>
