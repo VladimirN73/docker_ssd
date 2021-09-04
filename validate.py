@@ -21,7 +21,6 @@ from PIL import Image
 if torch.cuda.is_available():
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
-
 def get_gt_information(filename):
     retarr = np.zeros((0, 7))
     with open(filename, newline='') as csvfile:
@@ -374,7 +373,7 @@ def test_ssdnet(folder_stl, file_weights):
     print((2 * recall * precision) / (recall + precision))
 
 
-def visualize(folder_stl):
+def visualize(folder_stl,log):
     predictions_list = [f for f in os.listdir(folder_stl) if f.endswith('.pickle')]
 
     for predicton_container in predictions_list:
@@ -406,6 +405,7 @@ def visualize(folder_stl):
                 im = cv2.imread(selected_image)
 
                 print("found feature " + str(Feature) + " in picture " + selected_image)
+                log +="<br> found feature " + str(Feature) + " in picture " + selected_image
 
                 color = {
                     0: [255, 255, 0, 255],
@@ -452,6 +452,8 @@ def visualize(folder_stl):
                 cv2.imwrite(selected_image, im)
                 counter += 1
 
+    return log
+
 def create_weigths():
     #
     file_weights = 'weights/VOC.pth'
@@ -483,6 +485,8 @@ def remove_files(folder, pattern):
 def run():
     start_time = time.time()
 
+    log = ""
+
     create_weigths()
 
     folder_stl = 'data/MulSet/set20/'
@@ -492,10 +496,11 @@ def run():
 
     test_ssdnet(folder_stl, file_weights)
 
-    visualize(folder_stl)
+    log = visualize(folder_stl, log)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
+    return log
 
 if __name__ == '__main__':
     run()

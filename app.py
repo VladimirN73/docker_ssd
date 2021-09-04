@@ -11,12 +11,12 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     str: str = """
-    <h2> docker_ssd v.0.0.4 is running ... </h2>
+    <h2> docker_ssd v.0.0.5 is running ... </h2>
     Execute <a href='./validate'>validate</a>
     <br><br><br>
     Show <a href='./debug'>debug</a>
     <br><br><br>
-    <img src='.\static\docker_001.png'/>"
+    <img src='.\static\docker_001.png'/>
     """
     return str
 
@@ -26,16 +26,12 @@ def debug():
     str: str = """
     <a href='/'>home</a>
     <h2> Debug Info </h2>
-    ... [provide debug info] ...
-    
+    ...
     
     <h2> History </h2>
-    <h3> v.0.0.4</h3>
+    <br><strong>04.02.21</strong> show images as 200x200, sort resulting png-files, fix docker port
     <br><strong>03.02.21</strong> try to fix issue with Create Folder
-    <h3> v.0.0.3</h3>
     <br><strong>03.02.21</strong> add --show result PNG-Files    
-    <br><br>
-    ... [provide debug info] ...
     """
     return str
 
@@ -57,7 +53,7 @@ def run_validate():
 
 def run_validate_internal():
     #
-    validate.run()
+    log = validate.run()
     ret = """
     <h1>OK</h1>
     """
@@ -80,14 +76,22 @@ def run_validate_internal():
 
     files = glob.glob(folder_res + '/' + pattern)
     for f in files:
-        ret += "<br> copy file" + folder_res + '/' + os.path.basename(f)
+        #ret += "<br> copy file" + folder_res + '/' + os.path.basename(f)
         shutil.copy(f, folder_static)
 
     files = glob.glob(folder_static + '/' + pattern)
-    for f in files:
+    sorted_files = sorted(files)
+
+    ret += "<div style='display:flex'>"
+    for f in sorted_files:
+        ret += "<div style='margin-left:5px;margin-left:5px'>"
         temp = os.path.basename(f)
-        ret += "<br>" + temp
-        ret += "<img src='" + folder_static + "/" + temp + "'/>"
+        ret += "<img src='" + folder_static + "/" + temp + "' width='200' height='200'/>"
+        ret += "<div style='margin-left:15px;'>" + temp + "</div>"
+        ret += "</div>"
+    ret += "</div>"
+
+    ret +="<div>" + log + "</div>"
 
     return ret
 
